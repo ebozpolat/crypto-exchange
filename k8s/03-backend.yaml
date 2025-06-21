@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xosmox-backend
+  namespace: xosmox
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: xosmox-backend
+  template:
+    metadata:
+      labels:
+        app: xosmox-backend
+    spec:
+      containers:
+      - name: backend
+        image: xosmox/backend:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: PORT
+          value: "3000"
+        envFrom:
+        - configMapRef:
+            name: xosmox-config
+        - secretRef:
+            name: xosmox-secrets
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  namespace: xosmox
+spec:
+  selector:
+    app: xosmox-backend
+  ports:
+  - port: 3000
+    targetPort: 3000
+  type: ClusterIP

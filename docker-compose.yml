@@ -1,0 +1,103 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: xosmox-postgres
+    environment:
+      POSTGRES_DB: xosmox
+      POSTGRES_USER: xosmox
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-xosmox_password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./xosmox-backend/setup-db.sql:/docker-entrypoint-initdb.d/setup-db.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - xosmox-network
+    restart: unless-stopped
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: xosmox-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - xosmox-network
+    restart: unless-stopped
+
+  # Backend API
+  backend:
+    build:
+      context: ./xosmox-backend
+      dockerfile: Dockerfile
+    container_name: xosmox-backend
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: xosmox
+      DB_USER: xosmox
+      DB_PASSWORD: ${DB_PASSWORD:-xosmox_password}
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET:-your_super_secret_jwt_key_change_this}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - xosmox-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: xosmox-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - xosmox-network
+    restart: unless-stopped
+
+  # Nginx Reverse Proxy (optional, for production)
+  nginx:
+    image: nginx:alpine
+    container_name: xosmox-nginx
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - xosmox-network
+    restart: unless-stopped
+    profiles:
+      - production
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  xosmox-network:
+    driver: bridge

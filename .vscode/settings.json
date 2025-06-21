@@ -3,5 +3,16 @@
   "typescript.suggest.autoImports": true,
   "typescript.updateImportsOnFileMove.enabled": "always",
   "typescript.preferences.importModuleSpecifier": "relative",
-  "typescript.workspaceSymbols.scope": "currentProject"
+  "typescript.workspaceSymbols.scope": "currentProject",
+  "typescript.tsc.autoDetect": "on",
+  "typescript.validate.enable": true,
+  "typescript.format.enable": true,
+  "typescript.suggest.enabled": true,
+  "typescript.preferences.quoteStyle": "single",
+  "typescript.preferences.semicolons": "remove",
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.git": true
+  }
 }

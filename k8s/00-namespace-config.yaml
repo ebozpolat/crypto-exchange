@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: xosmox
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: xosmox-config
+  namespace: xosmox
+data:
+  NODE_ENV: "production"
+  DB_HOST: "postgres-service"
+  DB_PORT: "5432"
+  DB_NAME: "xosmox"
+  DB_USER: "xosmox"
+  REDIS_URL: "redis://redis-service:6379"
+  CORS_ORIGIN: "https://yourdomain.com"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: xosmox-secrets
+  namespace: xosmox
+type: Opaque
+data:
+  DB_PASSWORD: eW91cl9kYl9wYXNzd29yZA== # base64 encoded
+  JWT_SECRET: eW91cl9qd3Rfc2VjcmV0X2tleQ== # base64 encoded
