@@ -122,8 +122,7 @@ docker-compose up -d
    npm install
    
    # Frontend
-   cd ../frontend
-   npm install
+   npm --prefix frontend install
    ```
 
 3. **Configure environment**
@@ -147,8 +146,7 @@ docker-compose up -d
    npm run dev
    
    # Frontend (terminal 2)
-   cd frontend
-   npm run dev
+   npm --prefix frontend run dev
    ```
 
 ## 🚀 Deployment
@@ -256,8 +254,7 @@ cd xosmox-backend
 npm test
 
 # Frontend tests
-cd frontend
-npm test
+npm --prefix frontend test
 
 # Integration tests
 npm run test:integration

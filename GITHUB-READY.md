@@ -37,7 +37,6 @@ xosmox/
 ├── 📄 .gitignore                   # Git ignore rules
 ├── 📄 .env.example                 # Environment template
 ├── 📄 docker-compose.yml           # Docker orchestration
-├── 📄 package.json                 # Root package configuration
 │
 ├── 🔧 Management Scripts
 │   ├── start-xosmox.sh            # Start development environment

@@ -44,9 +44,8 @@ cp .env.example .env
 npm run dev
 
 # Start frontend (new terminal)
-cd ../frontend
-npm install
-npm run dev
+npm --prefix frontend install
+npm --prefix frontend run dev
 ```
 
 ### 2. Production Server (VPS/Dedicated)
@@ -254,7 +253,7 @@ find $BACKUP_DIR -name "xosmox_*.sql.gz" -mtime +7 -delete
 - Check port availability: `netstat -tlnp | grep 3000`
 
 **Frontend build fails:**
-- Clear node_modules: `rm -rf node_modules package-lock.json && npm install`
+- Clear node_modules: `rm -rf frontend/node_modules frontend/package-lock.json && npm --prefix frontend install`
 - Check Node.js version: `node --version`
 
 **Database connection errors:**
@@ -309,9 +308,8 @@ npm install
 pm2 restart xosmox-backend
 
 # Update frontend
-cd ../frontend
-npm install
-npm run build
+npm --prefix frontend install
+npm --prefix frontend run build
 ```
 
 ## 📈 Scaling

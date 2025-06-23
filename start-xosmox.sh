@@ -4,7 +4,7 @@
 echo "🚀 Starting Xosmox Development Environment..."
 
 # Check if we're in the right directory
-if [ ! -f "package.json" ] || [ ! -d "xosmox-backend" ] || [ ! -d "frontend" ]; then
+if [ ! -d "xosmox-backend" ] || [ ! -d "frontend" ]; then
     echo "❌ Please run this script from the crypto-exchange root directory"
     exit 1
 fi

@@ -34,8 +34,7 @@ Thank you for your interest in contributing to Xosmox! This document provides gu
    npm install
    
    # Frontend
-   cd ../frontend
-   npm install
+   npm --prefix frontend install
    ```
 
 3. **Start development environment**
@@ -73,8 +72,7 @@ cd xosmox-backend
 npm test
 
 # Frontend tests
-cd frontend
-npm test
+npm --prefix frontend test
 ```
 
 ### Writing Tests
@@ -126,7 +124,7 @@ docs(api): update authentication endpoints
 
 ## 🚀 Release Process
 
-1. Update version in package.json
+1. Update version in frontend/package.json
 2. Update CHANGELOG.md
 3. Create release branch
 4. Test thoroughly
